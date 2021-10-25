@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import MessageInput from "./MessageInput";
 import MessageItem from "./MessageItem";
 
@@ -27,6 +27,8 @@ const MessageList = () => {
 
     setMessages(messages => ([newMessage, ...messages]));
   };
+
+  const doneEdit = () => setEditingId(null);
 
   const onUpdate = (text, id) => {
     const targetIndex = messages.findIndex(message => message.id === id);
@@ -60,8 +62,6 @@ const MessageList = () => {
       }
     });
   };
-
-  const doneEdit = () => setEditingId(null);
 
   return (
     <>
