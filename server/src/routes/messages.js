@@ -43,7 +43,7 @@ const messagesRoute = [
         userId: body.userId,
         timestamp: Date.now()
       };
-      messages.unShift(newMessage);
+      messages.unshift(newMessage);
       setMessages(messages);
 
       response.send(newMessage);
@@ -56,7 +56,15 @@ const messagesRoute = [
     handler: ({ body, params: { id } }, response) => {
       try {
         const messages = getMessages();
-        const targetIndex = messages.findIndex(message => message.id === id);
+        const targetIndex = messages.findIndex(message => {
+          let messageId = message.id;
+          if (typeof message.id === 'number') {
+            messageId = `${message.id}`;
+          }
+
+          return messageId === id;
+        });
+
         if (targetIndex < 0) throw '메시지가 없습니다.';
         if (messages[targetIndex].userId !== body.userId) throw '사용자가 다릅니다.'
 
@@ -74,12 +82,20 @@ const messagesRoute = [
     // Delete Messages
     method: 'delete',
     route: '/messages/:id',
-    handler: ({ body, params: { id } }, response) => {
+    handler: ({ body, params: { id }, query: { userId } }, response) => {
       try {
         const messages = getMessages();
-        const targetIndex = messages.findIndex(message => message.id === id);
+        const targetIndex = messages.findIndex(message => {
+          let messageId = message.id;
+          if (typeof message.id === 'number') {
+            messageId = `${message.id}`;
+          }
+
+          return messageId === id;
+        });
+
         if (targetIndex < 0) throw '메시지가 없습니다.';
-        if (messages[targetIndex].userId !== body.userId) throw '사용자가 다릅니다.'
+        if (messages[targetIndex].userId !== userId) throw '사용자가 다릅니다.'
 
         messages.splice(targetIndex, 1);
         setMessages(messages);
