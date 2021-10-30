@@ -59,6 +59,7 @@ const MessageList = () => {
     });
   };
 
+  // When this component is mounted
   useEffect(() => {
     getMessages();
   } , []);
