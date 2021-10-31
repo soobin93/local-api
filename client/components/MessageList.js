@@ -5,10 +5,10 @@ import MessageItem from "./MessageItem";
 import fetcher from "../fetcher";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
-const MessageList = () => {
+const MessageList = ({ serverMessages }) => {
 
   const { query: { userId = '' } } = useRouter();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(serverMessages);
   const [editingId, setEditingId] = useState(null);
   const [hasNext, setHasNext] = useState(true);
   const fetchMoreEl = useRef(null);
