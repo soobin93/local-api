@@ -5,7 +5,7 @@ import MessageItem from "./MessageItem";
 import fetcher from "../fetcher";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
-const MessageList = ({ serverMessages }) => {
+const MessageList = ({ serverMessages, users }) => {
 
   const { query: { userId = '' } } = useRouter();
   const [messages, setMessages] = useState(serverMessages);
@@ -84,6 +84,7 @@ const MessageList = ({ serverMessages }) => {
             startEdit={() => setEditingId(message.id)}
             isEditing={editingId === message.id}
             myId={userId}
+            user={users[message.userId]}
           />
         ))
       }</ul>
