@@ -27,7 +27,7 @@ const messagesRoute = [
 
         response.send(message);
       } catch (error) {
-        response.status(404).send({ error });
+        response.status(404).send({ error: error.message });
       }
     }
   },
@@ -36,17 +36,25 @@ const messagesRoute = [
     method: 'post',
     route: '/messages',
     handler: ({ body, params, query }, response) => {
-      const messages = getMessages();
-      const newMessage = {
-        id: v4(),
-        text: body.text,
-        userId: body.userId,
-        timestamp: Date.now()
-      };
-      messages.unshift(newMessage);
-      setMessages(messages);
+      try {
+        if (!body.userId) throw Error('no userId is given');
 
-      response.send(newMessage);
+        const messages = getMessages();
+
+        const newMessage = {
+          id: v4(),
+          text: body.text,
+          userId: body.userId,
+          timestamp: Date.now()
+        };
+
+        messages.unshift(newMessage);
+        setMessages(messages);
+
+        response.send(newMessage);
+      } catch (error) {
+        response.status(500).send({ error: error.message });
+      }
     }
   },
   {
@@ -74,7 +82,7 @@ const messagesRoute = [
 
         response.send(newMessage);
       } catch (error) {
-        response.status(500).send({ error });
+        response.status(500).send({ error: error.message });
       }
     }
   },
@@ -102,7 +110,7 @@ const messagesRoute = [
 
         response.send(id);
       } catch (error) {
-        response.status(500).send({ error });
+        response.status(500).send({ error: error.message });
       }
     }
   }
